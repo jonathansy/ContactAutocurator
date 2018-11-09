@@ -1,0 +1,40 @@
+% WRAP_LEGACY_TRAINING_DATA(TRIALARRAY, CONTACTARRAY, VIDEODIR) takes old 
+% trial and contact arrays used by the Hires Lab and wraps them together 
+% into a compatible input data format fpr ContactAutocurator. Do not use 
+% this code unless you have data in this legacy format. TRIALARRAY and 
+% CONTACTARRAY must either be a trial and contact array or a path to those 
+% respective arrays. VIDEODIR must be path to the directory containing the
+% videos of the labeled trials to be used as training data. 
+
+% Created: 2018-11-08 by J. Sy
+% Last updated: 2018-11-08 by J. Sy
+function [trainingArray] = wrap_legacy_training_data(trialArray, contactArray, videoDir)
+
+% Accept trial array as either array or path to array
+if exist(trialArray) == 2
+    tArray = load(trialArray);
+    tArray = tArray.T;
+elseif strcmpi(class(trialArray),'LCA.TrialArray')
+    tArray = trialArray;
+else
+    error('Invalid trial array input')
+end
+% Accept contact array as either array or path to array
+if exist(contactArray) == 2
+    contacts = load(trialArray);
+    contacts = contacts.contacts;
+elseif strcmpi(class(trialArray),'cell')
+    contacts = contactArray;
+else
+    error('Invalid contact array input')
+end
+% Check if videodir exists
+if exist(videoDir) ~=7
+    error('Cannot find video directory')
+end
+
+% Create empty training array
+trainingArray.meta = [];
+trainingArray.trials = cell(1, length(contacts));
+
+
