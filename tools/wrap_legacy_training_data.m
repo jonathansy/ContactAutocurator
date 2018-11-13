@@ -43,3 +43,29 @@ trainingArray.meta.cropDimensions = [81 81]; % Size to crop image to for
 % preprocessing of the training code. 
 
 
+% Loop through contact array and write data to trainingArray
+iterator = 1;
+for i = 1:length(contacts)
+    % See if contacts and T array load
+    try
+        conIdx = contacts{i}.contactInds{1};
+        distance = tArray.trials{i}.whiskerTrial.distanceToPoleCenter;
+    catch
+        continue
+    end
+    % Check video path for trial
+    videoName = tArray.trials{i}.trackerFileName;
+    fullVidPath = [videoDir filesep videoName];
+    if ~exist(fullVidPath)
+        continue
+    end
+    
+    % Begin repackaging trial data
+    trainingArray.trials{iterator}.distanceToPole = distance;
+    trainingArray.trials{iterator}.touchFrames = conIdx;
+    trainingArray.trials{iterator}.startFrame = tArray.trials{i}.pinDescentOnsetTime;
+    trainingArray.trials{iterator}.stopFrame = tArray.trials{i}.pinAscentOnsetTime;
+    trainingArray.trials{iterator}.videoPath = fullVidPath;
+    
+end
+
