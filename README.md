@@ -13,17 +13,33 @@ In addition to all the scripts in this repository, you will also require a worki
 
 Clone or download the scripts in this directory as well as the HLab dependencies and add both to the path. Currently the trial contact browser in HLab_Matlabtools is backwards compatible to MATLAB 2013b. The autocurator scripts in here may be compatible with older versions but have not been tested as such. 
 
-### Full Dependency List
-* Python 3.5 (compatibility not tested with 2.7)  
+### Dependencies
+```
+Python 3.5 (compatibility not tested with 2.7)  
   - Numpy package  
   - Pickle package  
-  - Scipy package  
-* Google Cloud SDK package 
-* MATLAB r2013b or later (recommend Parallel Processing and Machine Learning toolbox)  
+  - Scipy package
+```
+```
+Google Cloud SDK package
+```
+```
+MATLAB r2013b or later (recommend Parallel Processing and Machine Learning toolbox) 
+```
+
+  - [npy-matlab](https://github.com/kwikteam/npy-matlab)
+```
+Google Cloud Platform Account
+```
+
+
+### Recommended
+
+```
   - [HLab_MatlabTools](https://github.com/hireslab/HLab_MatlabTools)  
   - [HLab_Whiskers](https://github.com/hireslab/HLab_Whiskers)
-  - [npy-matlab](https://github.com/kwikteam/npy-matlab)
-* Google Cloud Account
+```
+
 
 Cloud ML Setup
 ------
