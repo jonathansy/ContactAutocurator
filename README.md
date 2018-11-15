@@ -14,31 +14,24 @@ In addition to all the scripts in this repository, you will also require a worki
 Clone or download the scripts in this directory as well as the HLab dependencies and add both to the path. Currently the trial contact browser in HLab_Matlabtools is backwards compatible to MATLAB 2013b. The autocurator scripts in here may be compatible with older versions but have not been tested as such. 
 
 ### Dependencies
-```
-Python 3.5 (compatibility not tested with 2.7)  
+* [Python 3.5 or higher](https://www.python.org/downloads/) (compatibility not tested with 2.7)  
   - Numpy package  
   - Pickle package  
   - Scipy package
-```
-```
-Google Cloud SDK package
-```
-```
-MATLAB r2013b or later (recommend Parallel Processing and Machine Learning toolbox) 
-```
-
+* [Google Cloud SDK package](https://cloud.google.com/sdk/)
+* MATLAB r2013b or later
   - [npy-matlab](https://github.com/kwikteam/npy-matlab)
-```
-Google Cloud Platform Account
-```
+* Google Cloud Platform Account
+
 
 
 ### Recommended
+* [Janelia Farm Whisker Tracker](https://wiki.janelia.org/wiki/display/MyersLab/Whisker+Tracking+Downloads) (all distance-to-pole preprocessing assumes you have it)
 
-```
+* MATLAB Packages (for Hires Lab)
   - [HLab_MatlabTools](https://github.com/hireslab/HLab_MatlabTools)  
   - [HLab_Whiskers](https://github.com/hireslab/HLab_Whiskers)
-```
+
 
 
 Cloud ML Setup
