@@ -19,9 +19,6 @@ else
     error('No avi or mp4 video files found in video directory')
 end
 
-% Make WL files
-makeAllDirectory_WhiskerTrial_2pad(videoDir, 0)
-
 % Loop through video list for packaging 
 curationArray = cell(1,length(vidList));
 for i = 1:length(vidList)
@@ -36,5 +33,4 @@ end
 % finds distance to pole information
 function [dist] = find_distance_info(whiskersFile, video)
 [r, stuff] = load_whiskers_file(whiskersFile);
-
 end
