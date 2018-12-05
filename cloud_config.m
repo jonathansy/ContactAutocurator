@@ -4,10 +4,11 @@
 
 function [settings] = cloud_config()
 % Google Cloud Platform settings
-settings.gcloudMainBucket = 'gs://whisker-autocurator-data'; % Name of your gcloud bucket for this project
-settings.gcloudDataBucket = 'gs://whisker-autocurator-data/Data/Curation'; % Cloud directory to upload data for processing
-settings.gcloudProjectID = 'whisker-personal-autocurator'; % Google Cloud Platform proejct ID for this project (must be accessible by current cloud user)
-settings.gcloudLogDir = 'gs://whisker-autocurator-data/Jobs'; % Cloud directory to store logs from training or curation
+settings.mainBucket = 'gs://whisker-autocurator-data'; % Name of your gcloud bucket for this project
+settings.dataBucket = 'gs://whisker-autocurator-data/Data/Curation'; % Cloud directory to upload data for processing
+settings.projectID = 'whisker-personal-autocurator'; % Google Cloud Platform proejct ID for this project (must be accessible by current cloud user)
+settings.logDir = 'gs://whisker-autocurator-data/Jobs'; % Cloud directory to store logs from training or curation
+settings.models = 'gs://whisker-autocurator-data/Models'; % Place to store your cloud models
 settings.runVersion = 1.8; % Runtime version of Cloud ML to use
 settings.region = 'us-east1'; % Datacenter to use for processing jobs
 

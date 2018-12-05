@@ -5,6 +5,7 @@
 % the Janelia Farm whisker Tracker. VIDEODIR and DATADIR can be the same
 % if video and data files are stored in the same directory. 
 
+
 % Created: 2018-11-12 by J. Sy
 % Last Updated: 2018-11-12 by J. Sy
 
@@ -20,12 +21,12 @@ else
 end
 
 % Make WL files
-makeAllDirectory_WhiskerTrial_2pad(videoDir, 0)
+Whisker.makeAllDirectory_WhiskerTrial_2pad(videoDir, 0)
 
 % Loop through video list for packaging 
 curationArray = cell(1,length(vidList));
 for i = 1:length(vidList)
-    whiskerFileName = [dataDir filesep vidList(i).name(1:end-4) '.whiskers'];
+    wtFileName = [dataDir filesep vidList(i).name(1:end-4) '.WT'];
     fullVideoName = [videoDir filesep vidList(i).name];
     distanceInfo = find_distance_info(whiskerFileName, fullVideoName);
     curationArray{i}.distanceToPole = distanceInfo;
@@ -34,7 +35,7 @@ end
 
 % FIND_DISTANCE_INFO reads a .whiskers file, calculates bar position, and
 % finds distance to pole information
-function [dist] = find_distance_info(whiskersFile, video)
-[r, stuff] = load_whiskers_file(whiskersFile);
-
-end
+% function [dist] = find_distance_info(whiskersFile, video)
+% [r, stuff] = load_whiskers_file(whiskersFile);
+% 
+% end

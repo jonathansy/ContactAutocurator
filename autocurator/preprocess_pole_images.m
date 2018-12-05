@@ -26,7 +26,7 @@ switch inType
                 tContacts(:) = -1;
                 contacts{i}.video = 'null';
             else % Trial safe to preprocess
-                numPoints = length(T.trials{i}.whiskerTrial.distanceToPoleCenter{1});
+                numPoints = length(T.trials{i}.whiskerTrial.barPos);
                 tContacts = zeros(1, numPoints);
                 poleDownTime = (T.trials{i}.pinDescentOnsetTime -.08)*1000; 
                 poleUpTime = T.trials{i}.pinAscentOnsetTime*1000;
@@ -39,12 +39,18 @@ switch inType
                 end
                 % Determine minimum point to see if local tracking goes
                 % below zero.  
-                locMin = min(T.trials{i}.whiskerTrial.distanceToPoleCenter{1});
-                if locMin > 0.5
-                    locMin = 0;
-                end
+%                 locMin = min(T.trials{i}.whiskerTrial.distanceToPoleCenter{1});
+%                 if locMin > 0.5
+%                     locMin = 0;
+%                 end
+                % Find valid times 
+                validTimes = 1000*(T.trials{i}.whiskerTrial.time{1});
                 for j = 1:numPoints %Loop through each point in trial
-                    currentPoint = T.trials{i}.whiskerTrial.distanceToPoleCenter{1}(j);
+                    if ismember(j, validTimes)
+                        currentPoint = T.trials{i}.whiskerTrial.distanceToPoleCenter{1}(j);
+                    else
+                        currentPoint = 0;
+                    end
                     % Check if in pole up range
                     if j > poleDownTime && j < poleUpTime
                         inRange = 1;
@@ -74,9 +80,9 @@ switch inType
                         vOut = false;
                     end
                     % Select based on pole up range and distance to pole
-                    if currentPoint > (0.5 + locMin) || inRange == 0
+                    if currentPoint > 2 || inRange == 0
                         tContacts(j) = 0;
-                    elseif currentPoint <= (0.5 + locMin) && vOut == false
+                    elseif currentPoint <= 2 && vOut == false
                         tContacts(j) = 2;
 %                     elseif currentPoint <= 1 && vOut == false
 %                         tContacts(j) = 3;
