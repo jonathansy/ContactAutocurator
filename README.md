@@ -53,3 +53,13 @@ Autocurator_Beta, HLab_MatlabTools, HLab_Whiskers, and npy-matlab should all be 
 Within Autocurator_Beta, make sure you have a subdirectory called 'trainer' (you can rename it but you will need to change the pathing in 'autocurator_master_function.m'. Within this subdirectory you should have cnn_curator_cloud.py, the .yaml file you are using as a configuration file (default/example included in this package), and \_\_init\_\_.py (which is an empty Python file but required for operation). 
 
 You should designate a directory on your local drive to save .npy files as well as a location to save the final curated datasets. 
+
+## Usage
+
+ContactAutocurator is a pipeline and neural network model designed to read a session of videos and determine the contact times in those videos. It was designed to determine when a mouse whisker is touching a pole, but the pipeline itself should be generalizable for other types of tactile contacts. With that in mind (and because video data can vary dramatically based on the experiment), the ContactAutocurator code contains two main pipelines. One is to train a new convolutional neural network model with pre-curated training data. The other pipeline will curate new data based on a selected model. 
+
+Because the pipelines were developed with whisker curation in mind, they assume that you have the Janelia Farm Whisker tracker or a similar method of pre-tracking as well as a method of cropping videos to the regions where contacts are occuring (while not strictly necessary, this dramatically lowers the size of the processed images, thus increasing speed and simplifying the necessary model). If you do not have the Janelia Farm Whisker tracker, you will either need to recode the pipeline for preprocessing (based on the contacts you want to detect) or disable preprocessing entirely. 
+
+For more in depth reading on each pipeline see:
+* [Model Training Pipeline](https://github.com/jonathansy/ContactAutocurator/blob/master/docs/Training_Pipeline_Documentation.md)
+* [Autocurator Pipeline](https://github.com/jonathansy/ContactAutocurator/blob/master/docs/Autocurator_Documentation.md) 
