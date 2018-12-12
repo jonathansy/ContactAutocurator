@@ -12,7 +12,4 @@ settings.models = 'gs://whisker-autocurator-data/Models'; % Place to store your 
 settings.runVersion = 1.8; % Runtime version of Cloud ML to use
 settings.region = 'us-east1'; % Datacenter to use for processing jobs
 
-% Local directories for data processing use
-settings.unprocessedDir = 'C:\SuperUser\CNN_Projects\JK_Pipeline\Datasets'; % Location of unprocessed data
-settings.processedDir = 'C:\SuperUser\CNN_Projects\JK_Pipeline\Curated_Datasets'; % Location in which to download unprocessed data from cloud
 end
