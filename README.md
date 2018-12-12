@@ -16,7 +16,9 @@ The convolutional neural networks are designed to be trained and deployed on the
 
 ------
 ## Installation 
-The cloud training and curation scripts in this account have all been written for Google Cloud Platform's cloud ML API. 
+The cloud training and curation scripts in this account have all been written for Google Cloud Platform's cloud ML API. While training and curation can be done on a local drive it is highly recommended not to attempt this without a CUDA-enabled GPU. Before running a program on ContactAutocurator, please ensure all of the dependencies from the list below are installed (with the exception of Google cloud items if you do not intend to train on the cloud). See [Cloud ML Setup]() below.    
+
+
 
 ### Dependencies
 * [Python 3.5 or higher](https://www.python.org/downloads/) (compatibility not tested with 2.7)  
@@ -33,14 +35,13 @@ The cloud training and curation scripts in this account have all been written fo
 ### Recommended
 * [Janelia Farm Whisker Tracker](https://wiki.janelia.org/wiki/display/MyersLab/Whisker+Tracking+Downloads) (all distance-to-pole preprocessing assumes you have it)
 
-* MATLAB Packages (for Hires Lab)
+* MATLAB Packages (for Hires Lab members)
   - [HLab_MatlabTools](https://github.com/hireslab/HLab_MatlabTools)  
   - [HLab_Whiskers](https://github.com/hireslab/HLab_Whiskers)
 
 
 
-Cloud ML Setup
-------
+### Cloud ML Setup
 If you intend to use the cloud curation scripts in this package, you will first need to setup a consistent directory structure within a Google Cloud Bucket. Buckets are a form of cloud data storage. Information about creating and using them can be found [here](https://cloud.google.com/storage/docs/creating-buckets). After creating a cloud storage bucket for your training jobs, you should create the following directories:
 /Jobs for storing output logs from curation
 /Data for importing uncurated image data 
@@ -51,8 +52,7 @@ Cloud storage buckets begin with the prefix gs://, for example gs://my_bucket/Da
 
 Submitting training jobs to CloudML do not require manually setting up virtual machines on Google's cloud console. You will have to specify certain settings for the curation environment when you submit a job to the cloud. These are handled via  the 'gcloud ml-engine jobs submit' command as well as a .yaml file included in the local directory. Important variables to specify are the type of GPU (if any) to use, the runtime environment, and the [region](https://cloud.google.com/compute/docs/regions-zones/) (note that only certain regions support GPU use).    
 
-Local Drive Setup 
-------
+### Local Drive Setup 
 Autocurator_Beta, HLab_MatlabTools, HLab_Whiskers, and npy-matlab should all be cloned to the local Github location and added to the MATLAB path. Python should be installed. Once Python is installed, use pip to install the other packages on the command line (exact syntax for using pip may vary with your version of Python). Install Google Cloud SDK and make sure its commands can be run from the command line prompt. 
 
 Within Autocurator_Beta, make sure you have a subdirectory called 'trainer' (you can rename it but you will need to change the pathing in 'autocurator_master_function.m'. Within this subdirectory you should have cnn_curator_cloud.py, the .yaml file you are using as a configuration file (default/example included in this package), and \_\_init\_\_.py (which is an empty Python file but required for operation). 
