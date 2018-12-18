@@ -13,8 +13,6 @@ Currently the pipeline only supports MATLAB, however intermediary steps call Pyt
 The convolutional neural networks are designed to be trained and deployed on the cloud. While nothing about the model training and deployment code are platform-limiting, the pipeline was written to use Google Cloud Platform (CloudML) and the installation instructions will contain a brief guide to setting up a Google Cloud Platform account. If you have access to a CUDA-enabled GPU, local versions of the neural network code are included but it is highly recommended that they are not used without a GPU. 
 
 
-
-------
 ## Installation 
 The cloud training and curation scripts in this account have all been written for Google Cloud Platform's cloud ML API. While training and curation can be done on a local drive it is highly recommended not to attempt this without a CUDA-enabled GPU. Before running a program on ContactAutocurator, please ensure all of the dependencies from the [list](#dependencies) below are installed (with the exception of Google cloud items if you do not intend to train on the cloud). See [Cloud ML Setup](#cloud-ml-setup) for specific instructions on creating a Google Cloud Platform account. 
 
@@ -47,7 +45,9 @@ Once all dependencies have been installed and all code is on the MATLAB path, th
 
 ## Google Cloud Platform and Cloud ML Setup
 ### Account Setup
-To run model training and curation jobs on the cloud, you will need a Google Cloud Platform account. You can associate this account with any existing Google account/Google email address although some university accounts may limit access to these tools. As of the time this documentation was written, creation of a new Google Cloud Platform account will comes with $300 of free credit, enough for approximately 111 hours of GPU time on an Nvidia Tesla P100. A major of benefit of the cloud ML API is that you will only be billed while a training or curation job is running, where-as you would be billed for virtual machine setup for using neural networks the entire time it is operational, even if no operations are running. Other than the billing for cloud ML, you will be charged for use of a Google Cloud storage bucket, however these charges should be negligible unless your data enters the range of hundreds of terabytes.    
+To run model training and curation jobs on the cloud, you will need a Google Cloud Platform account. You can associate this account with any existing Google account/Google email address although some university accounts may limit access to these tools. As of the time this documentation was written, creation of a new Google Cloud Platform account will comes with $300 of free credit, enough for approximately 111 hours of GPU time on an Nvidia Tesla P100. A major of benefit of the cloud ML API is that you will only be billed while a training or curation job is running, where-as you would be billed for virtual machine setup for using neural networks the entire time it is operational, even if no operations are running. Other than the billing for cloud ML, you will be charged for use of a Google Cloud storage bucket, however these charges should be negligible unless your data enters the range of hundreds of terabytes.
+
+The Cloud ML API will not be enabled by default, you will need to enable it for your particular project. The Cloud ML menu is found under the "Artificial Intelligence" header in the navigation menu on the left. When enabled, the interface will allow you to see any training/curation jobs that have been run (under "jobs") and any models hosted on Cloud ML (ContactAutocurator does not currently make use of this feature). 
 
 ### Storage Bucket Setup
 If you intend to use the cloud curation scripts in this package, you will first need to setup a consistent directory structure within a Google Cloud Bucket. Buckets are a form of cloud data storage. Information about creating and using them can be found [here](https://cloud.google.com/storage/docs/creating-buckets). After creating a cloud storage bucket for your training jobs, you should create the following directories:
@@ -58,7 +58,18 @@ If you intend to use the cloud curation scripts in this package, you will first 
 
 Cloud storage buckets begin with the prefix gs://, for example gs://my_bucket/Data. Make sure all relevant cloud paths are set within [autocurator_master_function.m](https://github.com/jonathansy/whisker-autocurator/blob/master/Autocurator_Beta/autocurator_master_function.m). Cloud storage buckets do not have the same functionality as local drives and thus will not display their properties or index files. They also require the File_IO package to index on Python (included with Tensorflow). 
 
-Submitting training jobs to CloudML do not require manually setting up virtual machines on Google's cloud console. You will have to specify certain settings for the curation environment when you submit a job to the cloud. These are handled via  the 'gcloud ml-engine jobs submit' command as well as a .yaml file included in the local directory. Important variables to specify are the type of GPU (if any) to use, the runtime environment, and the [region](https://cloud.google.com/compute/docs/regions-zones/) (note that only certain regions support GPU use).    
+Submitting training jobs to CloudML do not require manually setting up virtual machines on Google's cloud console. You will have to specify certain settings for the curation environment when you submit a job to the cloud. These are handled via  the 'gcloud ml-engine jobs submit' command as well as a .yaml file included in the local directory. Important variables to specify are the type of GPU (if any) to use, the runtime environment, and the [region](https://cloud.google.com/compute/docs/regions-zones/) (note that only certain regions support GPU use). 
+
+### Interface Setup
+Your local computer interfaces with Google Cloud Platform via the Cloud SDK package. While it has its own shell, you can run the commands on a normal command window. To login to your account, type
+```
+gcloud auth login
+``` 
+which should open a page on Chrome asking you to select which Google Account to login in to on Cloud SDK. Note that the login persists even if the command window is closed and operates independently of which account you are actually logged into on Chrome. After loggin in, you will also need to set a project on Cloud SDK. to do this type
+```
+gcloud config set project name-of-your-project-here
+```
+Note that you will need to type your project ID, which can be different from the actual name of your project (typically all lowercase with dashes replacing any spaces between words). The ID name for your project is shown to the right of the actual name under the "Select a project" dropdown on the Google Cloud Platform console. Like with account logins, this will persist even after the command window is closed. 
 
 ## Local Drive Setup 
 Autocurator_Beta, HLab_MatlabTools, HLab_Whiskers, and npy-matlab should all be cloned to the local Github location and added to the MATLAB path. Python should be installed. Once Python is installed, use pip to install the other packages on the command line (exact syntax for using pip may vary with your version of Python). Install Google Cloud SDK and make sure its commands can be run from the command line prompt. 
@@ -67,7 +78,6 @@ Within Autocurator_Beta, make sure you have a subdirectory called 'trainer' (you
 
 You should designate a directory on your local drive to save .npy files as well as a location to save the final curated datasets. 
 
-------
 ## Usage
 
 ContactAutocurator is a pipeline and neural network model designed to read a session of videos and determine the contact times in those videos. It was designed to determine when a mouse whisker is touching a pole, but the pipeline itself should be generalizable for other types of tactile contacts. With that in mind (and because video data can vary dramatically based on the experiment), the ContactAutocurator code contains two main pipelines. One is to train a new convolutional neural network model with pre-curated training data. The other pipeline will curate new data based on a selected model. 
