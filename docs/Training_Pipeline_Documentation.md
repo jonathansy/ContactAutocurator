@@ -62,7 +62,25 @@ Dataset preprocessing in training is arguably even more important than in autocu
 
 ## Troubleshooting
 ### Programming Error Troubleshooting
+The following are common errors which can occur during the training pipeline:
+* "Cannot find project"
+* "Insufficient resources in region"
+* "Image out of frame"
+* "Cannot find numpy arrays"
+* Model did not save 
+
 ### Inaccurate Model Troubleshooting
+This section is meant to offer suggestions for models which train to completion without error but do not traing properly. This normally takes one of two forms:
+> Underfitting: where neither the training nor the validation data is accurately predicted the model
+> Overfitting: predicts training data accurately but cannot generalize to the validation data 
+
+Both error types can also include issues where the model is reasonably accurate (better than random chance) but not good enough for the desired task. 
+
+There are two basic ways to fix underfitting, changing the training data or adding more layers to the model. Underfitting has been observed experimentally with training datasets of limited size (The ContactAutocurator failed to train a new model off of 1000 frames of data). Adding more training data will provide the model with more examples to work with. Adding more layers (convolutional or deep) to the model is a rather crude way of solving issues, but it has proven effective and is a recommended approach so long as your model does not begin overfitting. Underfitting can also occur do to an insufficient number of epochs to fit the training data. ContactAutocurator defaults to 100 epochs but the appropraitely number will very depending on the amount of training data and the complexity of the model needed.
+
+Models which are overfitting (for example, 99% accuracy on the training set, 52% accuracy on the validation set) can do so for a variety of reasons. If your training data is either too small or too similar, the model can "memorize" the training data but not actually learn the relevant features for predicting contacts. This can sometimes be fixed by increasing the variety of the training data, making it more representative of a typical sample and increasing the odds that the model learns generalizable features rather than just memorizing the images. Overfitting can also be caused by the creation of an overly complex model with too many layers. This can be remedied by decreasing the number of layers or increasing the dropout associated with each layer (see Tensorflow and Keras documentation for more information). 
+
+Properly assessing both underfitting and overfitting requires that both the training and validation set accurately represent all general types of images that need to be sorted into certain classes. One must also be aware of discrepancies between class sizes which can cause the model to ignore one particular class. There are various means of dealing with these discrepancies with the easiest being to increase the proportion of the underepresented class in the training data. More sophisticated methods can also be used but are beyond the scope of this guide.
 
 
 
