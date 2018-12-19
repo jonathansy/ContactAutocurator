@@ -71,8 +71,8 @@ The following are common errors which can occur during the training pipeline:
 
 ### Inaccurate Model Troubleshooting
 This section is meant to offer suggestions for models which train to completion without error but do not traing properly. This normally takes one of two forms:
-> Underfitting: where neither the training nor the validation data is accurately predicted the model
-> Overfitting: predicts training data accurately but cannot generalize to the validation data 
+* Underfitting: where neither the training nor the validation data is accurately predicted the model
+* Overfitting: predicts training data accurately but cannot generalize to the validation data 
 
 Both error types can also include issues where the model is reasonably accurate (better than random chance) but not good enough for the desired task. 
 
