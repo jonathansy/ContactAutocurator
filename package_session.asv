@@ -20,14 +20,15 @@ else
     error('No avi or mp4 video files found in video directory')
 end
 
+% Make WL files
+Whisker.makeAllDirectory_WhiskerTrial_2pad(videoDir, 0)
 
 % Loop through video list for packaging 
 curationArray = cell(1,length(vidList));
 for i = 1:length(vidList)
-    whiskerFileName = [dataDir filesep vidList(i).name(1:end-4) '.whiskers'];
-    barFileName = [dataDir filesep vidList(i).name(1:end-4) '.bar'];
+    wtFileName = [dataDir filesep vidList(i).name(1:end-4) '.WT'];
     fullVideoName = [videoDir filesep vidList(i).name];
-    distanceInfo = find_distance_info(whiskerFileName, barFileName);
+    distanceInfo = find_distance_info(whiskerFileName, fullVideoName);
     curationArray{i}.distanceToPole = distanceInfo;
     curationArray{i}.video = fullVideoName;
 end
@@ -53,12 +54,8 @@ for timePt = 1:length(whiskerInf)
         continue
     end
     [xBar,yBar] = barPositions(barIdx,2:3);
-    % Now calculate rough distance to pole. This is not, strictly speaking,
-    % the most accurate way to run this calculation, however, given we 
-    % only require rough measurements and the Janelia Farm Whisker tracker
-    % provides many vertices in each trace, it's much faster to simply run
-    % a simple distance calculation on each vertex rather than a fitted
-    % line
+    % Now calculate rough distance to pole. This is not, strictly speaking
+    
     if length(xPoints) ~= length(yPoints)
         dist(timePt) = nan;
     else
