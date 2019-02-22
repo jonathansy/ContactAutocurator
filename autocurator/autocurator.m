@@ -8,6 +8,7 @@ outputFileName = 'default_output.mat'; % Name to use when saving output file
 processDirectory = []; % Directory to use when creating and processing numpy files (can be same as video directory)
 cloudProcessDirectory = []; % Directory on cloud to transfer data to
 model = 'General_Model_R3.h5'; % Name of desired model to use
+modelROI = [81,81];
 jobName = 'Job_1'; % Name of cloud job (must be different each time)
 
 %% SECTION CONTROL
@@ -33,7 +34,7 @@ cloudSettings = cloud_config;
 % This is an optional section that will package your whisker tracker data 
 % together into a single object for ease of use. 
 if isempty(dataObject)
-    dataObject = build_whisker_data(dataTarget);
+    dataObject = package_session(videoDirectory, dataTarget);
 end
 
 %% Preprocess data
@@ -48,7 +49,7 @@ end
 % frames. This format is needed to be read into the python Tensorflow
 % script
 if NUMPY_CONVERT == 1
-    videos_to_numpy(tempContacts, processDirectory, videoDirectory);
+    videos_to_numpy(tempContacts, processDirectory, videoDirectory, modelROI);
 end
 
 %% Upload to cloud

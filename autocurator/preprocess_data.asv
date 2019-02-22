@@ -70,14 +70,11 @@ for i = 1:numTrials
             % being too far away even accounting for the whisker tracker's
             % high margin of error. 
             if dist > processSettings.distanceCutoff
-                labels(j) = 0;
-            else
-                labels(j) = 1;
+                labels(j) = 
         end
     end
     
     % Write trial data to temporary contacts
     preprocessedContacts{i}.video = dataObj.video;
-    preprocessedContacts{i}.labels = labels;
         
 end
