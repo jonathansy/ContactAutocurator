@@ -32,18 +32,20 @@ for i = 1:length(vidList)
     lVideo = VideoReader(fullVideoName);
     numFrames = lVideo.NumOfFrames;
     
-    distanceInfo = find_distance_info(whiskerFileName, barFileName);
+    [distanceInfo, tFrames, barCoords] = find_distance_info(whiskerFileName, barFileName);
     curationArray{i}.distanceToPole = distanceInfo;
     curationArray{i}.video = fullVideoName;
     curationArray{i}.numTrackedFrames = length(distanceInfo);
     curationArray{i}.numFrames = numFrames;
+    curationArray{i}.bar = barCoords;
+    curationArray{i}.trackedFrames = tFrames;
 end
 
 end
 
 % FIND_DISTANCE_INFO reads a .whiskers file, extracts bar position, and
 % finds distance to pole information
-function [dist, trackedFrames] = find_distance_info(whiskersFile, barFile)
+function [dist, trackedFrames, barPositions] = find_distance_info(whiskersFile, barFile)
 [whiskerInf, ~] = load_whiskers_file(whiskersFile);
 % And now to extract out distance to pole information
 dist = zeros(1, length(whiskerInf));

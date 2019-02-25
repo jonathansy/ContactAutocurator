@@ -14,6 +14,8 @@ if nargin == 1
     processSettings.useAbsoluteDistance = true;
     processSettings.distanceCutoff = 2;
     processSettings.curateUntracked = true;
+    processSettings.snipTrial = true;
+    processSettings.startStop = [500, 3500];
 end
 %% MAIN
 
@@ -73,11 +75,18 @@ for i = 1:numTrials
                 labels(j) = 0;
             else
                 labels(j) = 1;
+            end
+        if processSettings.snipTrial == 1
+            if j < processSettings.startStop(1) || j > processSettings.startStop(2)
+                labels(j) = 0;
+            end
         end
+            
     end
     
     % Write trial data to temporary contacts
-    preprocessedContacts{i}.video = dataObj.video;
+    preprocessedContacts{i}.video = dataObj{i}.video;
     preprocessedContacts{i}.labels = labels;
+    preprocessedContacts{i}.bar = dataObj{i}.bar;
         
 end

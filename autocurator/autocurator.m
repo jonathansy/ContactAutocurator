@@ -49,7 +49,7 @@ end
 % frames. This format is needed to be read into the python Tensorflow
 % script
 if NUMPY_CONVERT == 1
-    videos_to_numpy(tempContacts, processDirectory, videoDirectory, modelROI);
+    videos_to_numpy(tempContacts, processDirectory, modelROI);
 end
 
 %% Upload to cloud
