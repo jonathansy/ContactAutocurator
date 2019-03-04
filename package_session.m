@@ -29,11 +29,11 @@ for i = 1:length(vidList)
     fullVideoName = [videoDir filesep vidList(i).name];
     
     % Get number of frames in video
-    lVideo = VideoReader(fullVideoName);
-    numFrames = lVideo.NumOfFrames;
+    lVideo = mmread(fullVideoName);
+    numFrames = length(lVideo.frames);
     
     [distanceInfo, tFrames, barCoords] = find_distance_info(whiskerFileName, barFileName);
-    curationArray{i}.distanceToPole = distanceInfo;
+    curationArray{i}.distance = distanceInfo;
     curationArray{i}.video = fullVideoName;
     curationArray{i}.numTrackedFrames = length(distanceInfo);
     curationArray{i}.numFrames = numFrames;
@@ -46,7 +46,7 @@ end
 % FIND_DISTANCE_INFO reads a .whiskers file, extracts bar position, and
 % finds distance to pole information
 function [dist, trackedFrames, barPositions] = find_distance_info(whiskersFile, barFile)
-[whiskerInf, ~] = load_whiskers_file(whiskersFile);
+[whiskerInf, ~] = Whisker.load_whiskers_file(whiskersFile);
 % And now to extract out distance to pole information
 dist = zeros(1, length(whiskerInf));
 barPositions = load(barFile,'-ASCII');
@@ -62,7 +62,8 @@ for timePt = 1:length(whiskerInf)
         dist(timePt) = nan;
         continue
     end
-    [xBar,yBar] = barPositions(barIdx,2:3);
+    xBar = barPositions(barIdx,2);
+    yBar = barPositions(barIdx,3);
     % Now calculate rough distance to pole. This is not, strictly speaking,
     % the most accurate way to run this calculation, however, given we 
     % only require rough measurements and the Janelia Farm Whisker tracker

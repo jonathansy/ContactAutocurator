@@ -12,7 +12,7 @@ if nargin == 1
     processSettings.useVelocity = false;
     processSettings.velocityCutoff = 0.05;
     processSettings.useAbsoluteDistance = true;
-    processSettings.distanceCutoff = 2;
+    processSettings.distanceCutoff = 50;
     processSettings.curateUntracked = true;
     processSettings.snipTrial = true;
     processSettings.startStop = [500, 3500];
@@ -76,6 +76,7 @@ for i = 1:numTrials
             else
                 labels(j) = 1;
             end
+        end
         if processSettings.snipTrial == 1
             if j < processSettings.startStop(1) || j > processSettings.startStop(2)
                 labels(j) = 0;
