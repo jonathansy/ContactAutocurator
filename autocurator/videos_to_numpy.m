@@ -19,11 +19,16 @@ for i = 1:numTrials
         % Find valid frames
         cFrame = trialVideo.frames(frameIdx(j)).cdata(:,:,1);
         % Use bar positions to crop
+        if frameIdx(j) > length(tContacts{i}.bar)
+            % Not enough bar positions, use last valid one and hope it
+            % works
+            frameIdx(j) = length(tContacts{i}.bar);
+        end
         xPos = round(tContacts{i}.bar(frameIdx(j),2));
         yPos = round(tContacts{i}.bar(frameIdx(j),3));
-        poleBox = [xPos-roi(1), xPos + roi(1), yPos - roi(2), yPos + roi(2)];
+        poleBox = [xPos-floor(roi(1)/2), xPos + floor(roi(1)/2), yPos - floor(roi(2)/2), yPos + floor(roi(2)/2)];
         % Check if ROI exceeds edge of image and skip if so
-        nFrameMat = curFrame((poleBox(3)):(poleBox(4)),(poleBox(1)):(poleBox(2)));
+        nFrameMat = cFrame((poleBox(3)):(poleBox(4)),(poleBox(1)):(poleBox(2)));
         nFrameMat = imadjust(nFrameMat);
         % Save frame in array
         finalMat(j,:,:) = nFrameMat;
