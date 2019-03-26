@@ -3,7 +3,7 @@
 %% PARAMETERS
 videoDirectory = []; % Location of your video files
 dataObject = []; % Path or variable name of data object, leave empty to build
-dataTarget = []; % Directory of whisker files from tracker to build data object, leave blank if built 
+dataTarget = []; % Directory of whisker files from tracker to build data object, leave blank if built
 outputFileName = 'default_output.mat'; % Name to use when saving output file
 processDirectory = []; % Directory to use when creating and processing numpy files (can be same as video directory)
 cloudProcessDirectory = []; % Directory on cloud to transfer data to
@@ -31,10 +31,16 @@ cloudSettings = cloud_config;
 %% Input checks
 
 %% Build data object (if needed)
-% This is an optional section that will package your whisker tracker data 
-% together into a single object for ease of use. 
+% This is an optional section that will package your whisker tracker data
+% together into a single object for ease of use.
 if isempty(dataObject)
     dataObject = package_session(videoDirectory, dataTarget);
+    % Save packaged files to avoid long reloading time
+    packaged_filename = [processDirectory filesep 'Data_Package_' jobName];
+    save(packaged_filename, dataObject);
+else
+    dataObject = load(dataObject);
+    dataObject = dataObject.dataObject;
 end
 
 %% Preprocess data
@@ -58,7 +64,7 @@ if UPLOAD == 1
     % Uses gsutil command tool
     gsutilUpCmd = sprintf('gsutil -m cp %s %s',...
         npyDataPath, cloudProcessDirectory);
-    system(gsutilUpCmd)   
+    system(gsutilUpCmd)
 end
 
 %% Process on cloud
@@ -77,27 +83,27 @@ if PROCESS == 1
         '-- ^'...
         '--cloud_data_path %s '...
         '--s_model_path %s '...
-        '--job_name %s '],... 
+        '--job_name %s '],...
         jobName,...
         cloudSettings.logDir,... % Place to store log files
         cloudSettings.runVersion,... % Runtime version
         pathSettings.cloudCurationScript,... % Path to python script actually used on cloud
-        [pathSettings.cloudCurationScript 'cnn_curator_cloud'],... 
+        [pathSettings.cloudCurationScript 'cnn_curator_cloud'],...
         cloudSettings.region,... % Datacenter to use (see README)
         pathSettings.curateConfigFile,... % Config file that requests GPU from cloud
-        cloudProcessDirectory,... 
+        cloudProcessDirectory,...
         [cloudSettings.models '/' model],... % Path to desired model (please upload new models to same path)
         jobName);
-    
+
     system(gcloudCmd)
-    pause(1200) % gCloud doesn't have an automatic means of notifying 
+    pause(1200) % gCloud doesn't have an automatic means of notifying
     % MATLAB when it is done, as a result, the best way to let the code run
     % automatically is to put in a pause command that exceeds the estimated
     % time needed by the cloud curation script. Unfortunately, this will
     % change based on the size of the dataset being curated, so
     % experimental benchmarking will be needed to determine appropriate
     % numbers
-    
+
 end
 
 %% Download from cloud
@@ -120,10 +126,10 @@ if WRITE_CONTACTS == 1
 end
 
 %% Clear directories
-% Deletes the numpy files created by clearing processing directories. 
+% Deletes the numpy files created by clearing processing directories.
 % Please ensure no downstream errors occured before using this as
 % re-running the code will be much faster without having to regenerate the
-% numpy files. 
+% numpy files.
 if CLEAR_DIRECTORIES == 1
     system(['del /q ' processDir])
     system(['gsutil -m rm -rf ' cloudProcessDirectory])
