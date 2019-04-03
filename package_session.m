@@ -29,7 +29,7 @@ for i = 1:length(vidList)
     fullVideoName = [videoDir filesep vidList(i).name];
 
     % Get number of frames in video, helps with dropped frame issues
-    lVideo = VideoREader(fullVideoName);
+    lVideo = VideoReader(fullVideoName);
     numFrames = 0;
     while hasFrame(lVideo)
         readFrame(lVideo);
