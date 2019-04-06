@@ -39,6 +39,7 @@ for i = 1:length(vidList)
     catch % Attempt to use mmread, sometimes works on mp4s where VideoReader fails
         lVideo = mmread(fullVideoName);
         numFrames = length(lVideo.frames);
+    end
 
     [distanceInfo, tFrames, barCoords] = find_distance_info(whiskerFileName, barFileName);
     curationArray{i}.distance = distanceInfo;
@@ -58,9 +59,11 @@ try % Account for missing or corrupt files
     [whiskerInf, ~] = Whisker.load_whiskers_file(whiskersFile);
     barPositions = load(barFile,'-ASCII');
 catch % Either bar file or whisker file missing or corrupt
+    warning('Failed to load either %s or %s, no distance-to-pole data will be available for this trial', whiskersFile, barFile)
     dist = [];
     trackedFrames = [];
     barPositions = [];
+    return
 end
 % And now to extract out distance to pole information
 dist = zeros(1, length(whiskerInf));

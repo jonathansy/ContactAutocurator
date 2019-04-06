@@ -28,7 +28,7 @@ preprocessedContacts{1}.video = [];
 for i = 1:numTrials
     % Check if we want to preprocess with data, if not, mark every frame as
     % good
-    if processSettings.useDataPreprocessing == 0
+    if processSettings.useDataPreprocessing == 0 || dataObj{i}.numFrames == 0
         labels = zeros(1,dataObj{i}.numFrames);
         labels(:) = 1;
         preprocessedContacts{i}.labels = labels;
