@@ -29,12 +29,16 @@ for i = 1:length(vidList)
     fullVideoName = [videoDir filesep vidList(i).name];
 
     % Get number of frames in video, helps with dropped frame issues
-    lVideo = VideoReader(fullVideoName);
-    numFrames = 0;
-    while hasFrame(lVideo)
-        readFrame(lVideo);
-        numFrames = numFrames + 1;
-    end
+    try % See if normal mp4
+        lVideo = VideoReader(fullVideoName);
+        numFrames = 0;
+        while hasFrame(lVideo)
+            readFrame(lVideo);
+            numFrames = numFrames + 1;
+        end
+    catch % Attempt to use mmread, sometimes works on mp4s where VideoReader fails
+        lVideo = mmread(fullVideoName);
+        numFrames = length(lVideo.frames);
 
     [distanceInfo, tFrames, barCoords] = find_distance_info(whiskerFileName, barFileName);
     curationArray{i}.distance = distanceInfo;
@@ -50,10 +54,16 @@ end
 % FIND_DISTANCE_INFO reads a .whiskers file, extracts bar position, and
 % finds distance to pole information
 function [dist, trackedFrames, barPositions] = find_distance_info(whiskersFile, barFile)
-[whiskerInf, ~] = Whisker.load_whiskers_file(whiskersFile);
+try % Account for missing or corrupt files
+    [whiskerInf, ~] = Whisker.load_whiskers_file(whiskersFile);
+    barPositions = load(barFile,'-ASCII');
+catch % Either bar file or whisker file missing or corrupt
+    dist = [];
+    trackedFrames = [];
+    barPositions = [];
+end
 % And now to extract out distance to pole information
 dist = zeros(1, length(whiskerInf));
-barPositions = load(barFile,'-ASCII');
 trackedFrames = zeros(1, length(whiskerInf));
 for timePt = 1:length(whiskerInf)
     % Get all x and y coordinates traced on whisker
