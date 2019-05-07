@@ -9,7 +9,7 @@
 % Created: 2018-11-12 by J. Sy
 % Last Updated: 2018-11-12 by J. Sy
 
-function [curationArray] = package_session(videoDir, dataDir)
+function [curationArray] = package_session(videoDir, dataDir, ffDir)
 
 % Find videos in directory, accept mp4 or avi
 mp4List = dir([videoDir '/*.mp4']);
@@ -29,16 +29,12 @@ for i = 1:length(vidList)
     fullVideoName = [videoDir filesep vidList(i).name];
 
     % Get number of frames in video, helps with dropped frame issues
-    try % See if normal mp4
-        lVideo = VideoReader(fullVideoName);
-        numFrames = 0;
-        while hasFrame(lVideo)
-            readFrame(lVideo);
-            numFrames = numFrames + 1;
-        end
-    catch % Attempt to use mmread, sometimes works on mp4s where VideoReader fails
-        lVideo = mmread(fullVideoName);
-        numFrames = length(lVideo.frames);
+    if ~isempty(ffDir)
+        [~, frameStr] = system([ffDir filesep 'ffprobe -v error -select_streams v:0 -show_entries stream=nb_frames -of default=nokey=1:noprint_wrappers=1' fullVideoName]);
+        numFrames = str2double(frameStr);
+    else
+        mmAttempt = mmread(fullVideoName);
+        numFrames = length(mmAttempt.frames);
     end
 
     [distanceInfo, tFrames, barCoords] = find_distance_info(whiskerFileName, barFileName);

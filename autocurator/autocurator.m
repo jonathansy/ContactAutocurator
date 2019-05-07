@@ -10,6 +10,7 @@ cloudProcessDirectory = []; % Directory on cloud to transfer data to
 model = 'General_Model_R3.h5'; % Name of desired model to use
 modelROI = [81,81];
 jobName = 'Job_1'; % Name of cloud job (must be different each time)
+ffmpegDir = []; % Location of ffmpeg executables (specifically need ffprobe)
 
 %% SECTION CONTROL
 % Use this to turn sections on and off, good for debugging without
@@ -34,7 +35,7 @@ cloudSettings = cloud_config;
 % This is an optional section that will package your whisker tracker data
 % together into a single object for ease of use.
 if isempty(dataObject)
-    dataObject = package_session(videoDirectory, dataTarget);
+    dataObject = package_session(videoDirectory, dataTarget, ffmpegDir);
     % Save packaged files to avoid long reloading time
     packaged_filename = [processDirectory filesep 'Data_Package_' jobName];
     save(packaged_filename, dataObject);
