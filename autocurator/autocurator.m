@@ -38,7 +38,7 @@ if isempty(dataObject)
     dataObject = package_session(videoDirectory, dataTarget, ffmpegDir);
     % Save packaged files to avoid long reloading time
     packaged_filename = [processDirectory filesep 'Data_Package_' jobName];
-    save(packaged_filename, dataObject);
+    save(packaged_filename, 'dataObject');
 else
     dataObject = load(dataObject);
     dataObject = dataObject.dataObject;
