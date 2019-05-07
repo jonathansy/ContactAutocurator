@@ -27,6 +27,26 @@ for i = 1:numTrials
         xPos = round(tContacts{i}.bar(frameIdx(j),2));
         yPos = round(tContacts{i}.bar(frameIdx(j),3));
         poleBox = [xPos-floor(roi(1)/2), xPos + floor(roi(1)/2), yPos - floor(roi(2)/2), yPos + floor(roi(2)/2)];
+        
+        # Check if out of frame and correct
+        [yDim, xDim] = size(cFrame);
+        if poleBox(1) < 1
+            poleBox(2) = poleBox(2) + (1 - poleBox(1));
+            poleBox(1) = 1;
+        end
+        if poleBox(2) > xDim
+            poleBox(1) = poleBox(1) - (poleBox(2)-yDim);
+            poleBox(2) = yDim;
+        end
+        if poleBox(3) < 1
+            poleBox(4) = poleBox(4) + (1 - poleBox(3));
+            poleBox(3) = 1;
+        end
+        if poleBox(4) > yDim
+            poleBox(3) = poleBox(3) - (poleBox(4)-yDim);
+            poleBox(4) = yDim;
+        end
+            
         % Check if ROI exceeds edge of image and skip if so
         nFrameMat = cFrame((poleBox(3)):(poleBox(4)),(poleBox(1)):(poleBox(2)));
         nFrameMat = imadjust(nFrameMat);
