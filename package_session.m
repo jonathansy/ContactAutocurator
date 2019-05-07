@@ -30,7 +30,7 @@ for i = 1:length(vidList)
 
     % Get number of frames in video, helps with dropped frame issues
     if ~isempty(ffDir)
-        [~, frameStr] = system([ffDir filesep 'ffprobe -v error -select_streams v:0 -show_entries stream=nb_frames -of default=nokey=1:noprint_wrappers=1' fullVideoName]);
+        [~, frameStr] = system([ffDir filesep 'ffprobe -v error -select_streams v:0 -show_entries stream=nb_frames -of default=nokey=1:noprint_wrappers=1 ' fullVideoName]);
         numFrames = str2double(frameStr);
     else
         mmAttempt = mmread(fullVideoName);
