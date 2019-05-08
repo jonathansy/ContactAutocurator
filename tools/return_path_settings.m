@@ -14,7 +14,7 @@ basePath = filePath(1:end-6);
 % Begin setting paths to important files
 paths.curateConfigFile = [basePath filesep 'autocurator' filesep 'cloud' filesep 'cloud_config_curation.yaml'];
 paths.trainConfigFile = [basePath filesep 'train_new_model' filesep 'cloud' filesep 'cloud_config_training.yaml'];
-paths.cloudCurationScript = [basePath filesep 'autocurator' filesep 'cloud']; 
+paths.cloudCurationScript = [basePath filesep 'autocurator']; 
 paths.cloudTrainingScript = [basePath filesep 'train_new_model' filesep 'cloud']; 
 paths.curatePreprocess = [basePath filesep 'autocurator' filesep 'preprocess_pole_images']; 
 end
