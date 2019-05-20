@@ -25,6 +25,8 @@ preprocessedContacts{1}.labels = [];
 preprocessedContacts{1}.trialNum = [];
 preprocessedContacts{1}.video = [];
 % Loop through trials and create contacts
+
+% Check for reasons to skip trial
 for i = 1:numTrials
     % Check if we want to preprocess with data, if not, mark every frame as
     % good
@@ -34,6 +36,12 @@ for i = 1:numTrials
         preprocessedContacts{i}.labels = labels;
         preprocessedContacts{i}.trialNum = dataObj.trialNum;
         preprocessedContacts{i}.video = dataObj.video;
+        continue
+    elseif isempty(dataObj{i}.bar)
+        labels = zeros(1,dataObj{i}.numFrames);
+        preprocessedContacts{i}.labels = labels;
+        preprocessedContacts{i}.trialNum = dataObj.trialNum;
+        preprocessedContacts{i}.video = dataObj.video; 
         continue
     end
     
