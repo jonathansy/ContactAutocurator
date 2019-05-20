@@ -34,13 +34,11 @@ for i = 1:numTrials
         labels = zeros(1,dataObj{i}.numFrames);
         labels(:) = 1;
         preprocessedContacts{i}.labels = labels;
-        preprocessedContacts{i}.trialNum = dataObj.trialNum;
         preprocessedContacts{i}.video = dataObj.video;
         continue
     elseif isempty(dataObj{i}.bar)
         labels = zeros(1,dataObj{i}.numFrames);
         preprocessedContacts{i}.labels = labels;
-        preprocessedContacts{i}.trialNum = dataObj.trialNum;
         preprocessedContacts{i}.video = dataObj.video; 
         continue
     end
