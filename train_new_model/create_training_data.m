@@ -29,6 +29,10 @@ function create_training_data(tArray, cArray, sizeROI, vidPath, transferDir, met
     if isempty(labels)
       continue
     end
+    % Skip uncurtable
+    if isfield(cArray{i}, 'uncuratable')
+        continue
+    end
     % Find name of corresponding video, skip if no name
     try
       videoName = tArray.trials{i}.whiskerTrial.trackerFileName;
@@ -36,7 +40,7 @@ function create_training_data(tArray, cArray, sizeROI, vidPath, transferDir, met
       continue
     end
     % Check full video path, skip if video doesn't exist
-    fullVideoPath = [vidPath filesep videoName];
+    fullVideoPath = [vidPath filesep videoName '.mp4'];
     if ~exist(fullVideoPath)
       continue
     end
@@ -45,9 +49,10 @@ function create_training_data(tArray, cArray, sizeROI, vidPath, transferDir, met
     videoArray = mmread(fullVideoPath);
 
     % Prep loop
-    poleStartTime = round(tArray.trials{i}.pinDescentOnsetTime);
-    poleStopTime = round(tArray.trials{i}.pinAscentOnsetTime);
-    barOffset = find(isnan(tArray.trials{i}.whiskerTrial.distanceToPoleCenter{1}) == 0, 1, 'first');
+    poleStartTime = round(1000*tArray.trials{i}.pinDescentOnsetTime);
+    poleStopTime = round(1000*tArray.trials{i}.pinAscentOnsetTime);
+    % barOffset = find(isnan(tArray.trials{i}.whiskerTrial.distanceToPoleCenter{1}) == 0, 1, 'first');
+    barOffset = 0;
     % Make sure pole stop time doesn't exceed video or bars
     if poleStopTime > length(videoArray.frames)
         poleStopTime = length(videoArray.frames);

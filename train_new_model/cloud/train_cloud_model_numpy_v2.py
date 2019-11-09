@@ -36,8 +36,8 @@ def train_model(data_dir, export_dir, m_name):
     # Setup model --------------------------------------------------------------
     num_classes = 2
     batch_size = 2048
-    img_rows = 81
-    img_cols = 81
+    img_rows = 61
+    img_cols = 61
     epochs = 80
     input_shape = (img_rows, img_cols, 1)
     logging.info('Setting up model')
@@ -78,22 +78,22 @@ def train_model(data_dir, export_dir, m_name):
     # Train model by looping through batches
     search_loc = data_dir + '/*.npy'
     datasets = file_io.get_matching_files(search_loc)
-    current_validation = 'gs://whisker-autocurator-data/Data/JK_Train/Valid_Data_1_Session_1.npy'
+    current_validation = 'gs://whisker-autocurator-data/Data/Better_Curation/Valid_Data_1_Session_1.npy'
     # Load initial validation data
     x_test = load_image_data(current_validation)
     x_test = x_test.reshape(x_test.shape[0], img_rows, img_cols, 1)
-    valid_labels = current_validation[0:44] + 'Valid_Labels_' + current_validation[55:]
+    valid_labels = current_validation[0:51] + 'Valid_Labels_' + current_validation[62:]
     y_test = load_image_labels(valid_labels, num_classes)
     batch_num = 1
     for np_file in datasets:
-        if np_file[50:56] == 'Labels':
+        if np_file[57:63] == 'Labels':
             continue
-        elif np_file[44:49] == 'Valid':
+        elif np_file[51:56] == 'Valid':
             if np_file != current_validation:
                 current_validation = np_file
                 x_test_new = load_image_data(current_validation)
                 x_test_new = x_test_new.reshape(x_test_new.shape[0], img_rows, img_cols, 1)
-                valid_labels_new = current_validation[0:44] + 'Valid_Labels_' + current_validation[55:]
+                valid_labels_new = current_validation[0:51] + 'Valid_Labels_' + current_validation[62:]
                 y_test_new = load_image_labels(valid_labels_new, num_classes)
                 x_test = np.concatenate((x_test, x_test_new), axis=0)
                 y_test = np.concatenate((y_test, y_test_new), axis=1)
@@ -102,17 +102,17 @@ def train_model(data_dir, export_dir, m_name):
             if batch_num == 1:
                 x_train = load_image_data(np_file)
                 x_train = x_train.reshape(x_train.shape[0], img_rows, img_cols, 1)
-                np_labels = np_file[0:44] + 'Train_Labels_' + np_file[55:]
+                np_labels = np_file[0:51] + 'Train_Labels_' + np_file[62:]
                 y_train = load_image_labels(np_labels, num_classes)
                 # Reset validation data
                 x_test = load_image_data(current_validation)
                 x_test = x_test.reshape(x_test.shape[0], img_rows, img_cols, 1)
-                valid_labels = current_validation[0:44] + 'Valid_Labels_' + current_validation[55:]
+                valid_labels = current_validation[0:51] + 'Valid_Labels_' + current_validation[62:]
                 y_test = load_image_labels(valid_labels, num_classes)
             else:
                 x_train_new = load_image_data(np_file)
                 x_train_new = x_train_new.reshape(x_train_new.shape[0], img_rows, img_cols, 1)
-                np_labels = np_file[0:44] + 'Train_Labels_' + np_file[55:]
+                np_labels = np_file[0:51] + 'Train_Labels_' + np_file[62:]
                 y_train_new = load_image_labels(np_labels, num_classes)
                 x_train = np.concatenate((x_train, x_train_new), axis=0)
                 y_train = np.concatenate((y_train, y_train_new), axis=1)
@@ -137,7 +137,7 @@ def train_model(data_dir, export_dir, m_name):
                 # Train on batch
                 model.fit(x_train, y_train,
                           batch_size=batch_size,
-                          epochs=100,
+                          epochs=300,
                           verbose=1,
                           shuffle=True,
                           validation_data=(x_test, y_test))

@@ -10,7 +10,7 @@ import logging
 from PIL import Image
 import pickle
 # Load tensorflow-related modules
-import tensorflow as tf
+import tensorflow.compat.v1 as tf
 from tensorflow.python.lib.io import file_io
 # Keras
 import keras
@@ -31,7 +31,8 @@ from keras import backend as K
 # NOTE: we may require a version to automatically load and curate by batch if
 # an entire session's dataset doesn't fit into RAM
 
-# Reset graph in case of re-runs
+# Reset graph in case of re-runs and fix compatibility stuff.
+tf.disable_v2_behavior()
 tf.reset_default_graph()
 
 

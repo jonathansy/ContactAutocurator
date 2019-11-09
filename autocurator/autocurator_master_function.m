@@ -15,6 +15,7 @@ WRITE_CONTACTS =        1;
 
 %% SETTINGS
   % Defaults
+  BEHAV_TRIAL_OFFSET = 0;
   % Bucket is Google Cloud storage location of data, url will begin with 'gs://'
   gcloudBucket = 'gs://whisker-autocurator-data';
   % Project ID name
@@ -66,7 +67,7 @@ WRITE_CONTACTS =        1;
   end
 
   %% (2) Section for pre-processing images
-  [contacts] = preprocess_pole_images(INPUT_DATA_FORMAT, tArray);
+  [contacts] = preprocess_pole_images(INPUT_DATA_FORMAT, tArray, BEHAV_TRIAL_OFFSET);
 
   %% (3) Turn directory into images
   % Take the videos supplied in the video directory and use them to create

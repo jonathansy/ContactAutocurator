@@ -1,7 +1,7 @@
 % PREPROCESS_POLE_IMAGES('distance', TARRAY) takes in a trial array and uses distance-to-pole
 % metrics to eliminate obvious nontouches, speeding up the time it takes for autocuration
 % PREPROCESS_POLE_IMAGES('pixel', IMAGEDIR) will reprocess based on number of pixels
-function [contacts] = preprocess_pole_images(inType, var2)
+function [contacts] = preprocess_pole_images(inType, var2, behavOffset)
 % Check process method
 switch inType
     % DISTANCE ONLY ---------------------------------------------------------
@@ -26,10 +26,15 @@ switch inType
                 tContacts(:) = -1;
                 contacts{i}.video = 'null';
             else % Trial safe to preprocess
+                if i+behavOffset > 1
+                    poleIdx = i+behavOffset;
+                else
+                    poleIdx = i;
+                end
                 numPoints = length(T.trials{i}.whiskerTrial.barPos);
                 tContacts = zeros(1, numPoints);
-                poleDownTime = (T.trials{i}.pinDescentOnsetTime -.08)*1000; 
-                poleUpTime = T.trials{i}.pinAscentOnsetTime*1000;
+                poleDownTime = (T.trials{poleIdx}.pinDescentOnsetTime -.08)*1000; 
+                poleUpTime = T.trials{poleIdx}.pinAscentOnsetTime*1000;
                 % Sanity check 
                 if poleUpTime > 4000
                     poleUpTime = 4000;
@@ -44,7 +49,7 @@ switch inType
 %                     locMin = 0;
 %                 end
                 % Find valid times 
-                validTimes = 1000*(T.trials{i}.whiskerTrial.time{1});
+                validTimes = int16(1000*(T.trials{i}.whiskerTrial.time{1}));
                 for j = 1:numPoints %Loop through each point in trial
                     if ismember(j, validTimes)
                         currentPoint = T.trials{i}.whiskerTrial.distanceToPoleCenter{1}(j);
