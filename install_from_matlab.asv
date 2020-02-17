@@ -1,0 +1,33 @@
+% Install all relevant files and change settings using MATLAB code
+% Created: 2018-11-08 by J. Sy
+% Last Updated: 2018-11-08 by J. Sy
+
+% SETTINGS
+
+
+% Add ContactAutocurator package to path
+packageFullPath = mfilename('fullpath');
+[packagePath,~,~] = fileparts(packageFullPath);
+addpath(genpath(packagePath))
+
+% OS-specific installation
+fprintf('Do you wish to attempt automatic installation of Python 3.8?\n')
+fprintf('[Y] Yes, install automatically\n')
+fprintf('[N] No, I wish to install manually or already have Python installed.')
+installChk = input('>');
+
+if strcmpi(installChk, '')
+
+if ispc
+    % Install Python
+    pythonSource = 'https://www.python.org/ftp/python/3.8.1/python-3.8.1-amd64.exe';
+    web(pythonSource)
+    % Install Cloud SDK
+    system('powershell ')
+    
+elseif isunix
+    pythonSource = 'https://www.python.org/ftp/python/3.8.1/Python-3.8.1.tgz';
+    web(pythonSource);
+else
+    error('Unsupported Operating System')
+end
