@@ -10,6 +10,6 @@ settings.projectID = 'whisker-personal-autocurator'; % Google Cloud Platform pro
 settings.logDir = 'gs://whisker-autocurator-data/Jobs'; % Cloud directory to store logs from training or curation
 settings.models = 'gs://whisker-autocurator-data/Models'; % Place to store your cloud models
 settings.runVersion = 1.8; % Runtime version of Cloud ML to use
-settings.region = 'us-east1'; % Datacenter to use for processing jobs
+settings.region = 'us-east1'; % Datacenter to use for processing jobs, us-central1 (Iowa) or us-east1 (South Carolina) is required to use TPUs and best GPUs
 
 end

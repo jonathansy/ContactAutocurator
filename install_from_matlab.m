@@ -67,3 +67,8 @@ elseif isunix
 else
     error('Unsupported Operating System')
 end
+
+% Open config file
+
+edit cloud_config.m
+edit autocurator_config.m
